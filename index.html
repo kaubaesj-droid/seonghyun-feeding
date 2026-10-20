@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>성현 키우기</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&display=swap">
+<style>
+:root{--bg:#e9f0f8;--card:#fff;--ink:#14213d;--mu:#5d6b85;--line:#cfd9e8;--coin:#ffb703;--coin2:#fb8500;--ok:#2a9d5c;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1626;--card:#19223a;--ink:#f1f4fb;--mu:#98a5c0;--line:#2a3654;--ok:#4cc58a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1626;--card:#19223a;--ink:#f1f4fb;--mu:#98a5c0;--line:#2a3654;--ok:#4cc58a;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Jua","Apple SD Gothic Neo","Malgun Gothic",sans-serif;-webkit-tap-highlight-color:transparent}
+main{max-width:480px;margin:0 auto;padding:16px 16px 40px}
+.top{text-align:center}
+.stage{font-size:15px;color:var(--mu);margin:4px 0 0}
+.money{font-size:44px;line-height:1.1;margin:4px 0}
+.rate{font-size:15px;color:var(--mu);margin:0}
+.scene{margin:16px 0 8px;border:3px solid var(--ink);border-radius:16px;overflow:hidden;background:linear-gradient(#8fd0ff66,transparent),var(--card)}
+.town{display:flex;flex-wrap:wrap;align-items:flex-end;gap:2px 8px;min-height:60px;padding:8px 10px 0;font-size:30px;line-height:1}
+.grp{display:flex;align-items:flex-end;gap:1px}
+.grp small{font-size:12px;color:var(--ink);font-family:inherit;margin-left:2px}
+.bld{display:inline-block;animation:drop .35s ease-out}
+@keyframes drop{from{transform:translateY(-30px) scale(.6);opacity:0}}
+.walk{height:10px;background:#9aa3b2;border-top:3px solid var(--ink)}
+.tapwrap{position:relative;height:120px;background:#3a3f4a;display:flex;justify-content:center;align-items:center;overflow:hidden}
+.tapwrap::before{content:"";position:absolute;left:0;right:0;top:50%;height:4px;margin-top:-2px;background:repeating-linear-gradient(90deg,#f5d76e 0 28px,transparent 28px 56px)}
+#tap{position:relative;width:100%;height:100%;border:none;background:none;font-size:72px;line-height:1;cursor:pointer;transition:transform .06s;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+#tap:active{transform:scale(.9)}
+#tap:focus-visible,.buy:focus-visible,#reset:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+#tap:focus-visible{outline-color:#fff;outline-offset:-6px}
+#tap svg{pointer-events:none;overflow:visible;display:block;margin:auto}
+.acc{display:none}
+svg[data-s="1"] .c1,svg[data-s="2"] .c2,svg[data-s="3"] .c3,svg[data-s="4"] .c4{display:inline}
+.pop{position:absolute;pointer-events:none;font-size:22px;color:#fff;animation:up .8s ease-out forwards}
+@keyframes up{to{transform:translateY(-70px);opacity:0}}
+.hint{text-align:center;color:var(--mu);font-size:14px;margin:0 0 18px}
+h2{font-size:18px;margin:20px 0 8px}
+.item{display:flex;align-items:center;gap:12px;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:8px}
+.item .ico{font-size:30px;width:40px;text-align:center}
+.item .info{flex:1;min-width:0}
+.item .nm{font-size:17px;margin:0}
+.item .ds{font-size:13px;color:var(--mu);margin:2px 0 0}
+.buy{font-family:inherit;font-size:15px;min-width:92px;padding:9px 10px;border-radius:10px;border:2px solid var(--ink);background:var(--card);color:var(--ink);cursor:pointer;touch-action:manipulation}
+.buy.can{background:var(--ok);color:#fff;border-color:var(--ok)}
+.buy:disabled{opacity:.55;cursor:not-allowed}
+.foot{text-align:center;margin-top:24px}
+#reset{font-family:inherit;font-size:13px;background:none;border:none;color:var(--mu);text-decoration:underline;cursor:pointer}
+@media (prefers-reduced-motion:reduce){.pop{animation:none;opacity:0}.bld{animation:none}#tap{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <section class="top">
+    <p class="stage" id="stage"></p>
+    <p class="money" id="money">0원</p>
+    <p class="rate" id="rate"></p>
+  </section>
+  <div class="scene"><div class="town" id="town"></div><div class="walk"></div><div class="tapwrap"><button id="tap" aria-label="성현 누르기"><svg viewBox="0 -12 90 124" width="88" height="112" aria-hidden="true" data-s="-1"><defs><clipPath id="hc"><ellipse cx="45" cy="29" rx="23" ry="29"/></clipPath></defs><g stroke-linecap="round" stroke-linejoin="round"><path d="M30 90V105M60 90V105" stroke="#3d405b" stroke-width="10" fill="none"/><ellipse cx="29" cy="108" rx="9" ry="4" fill="#14213d"/><ellipse cx="61" cy="108" rx="9" ry="4" fill="#14213d"/><rect x="39" y="50" width="12" height="14" fill="#f2c9a5"/><path d="M22 66L10 88M68 66L80 88" style="stroke:var(--shirt)" stroke-width="9" fill="none"/><circle cx="10" cy="91" r="4.5" fill="#f2c9a5"/><circle cx="80" cy="91" r="4.5" fill="#f2c9a5"/><path d="M20 62Q45 54 70 62L74 92H16Z" style="fill:var(--shirt)" stroke="#14213d" stroke-width="2"/><image href="data:image/jpeg;base64,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" x="22" y="0" width="46" height="58" preserveAspectRatio="xMidYMid slice" clip-path="url(#hc)"/><ellipse cx="45" cy="29" rx="23" ry="29" fill="none" stroke="#14213d" stroke-width="2"/><g class="acc c1"><path d="M23 12Q45 -6 67 12Z" fill="#e63946" stroke="#14213d" stroke-width="2"/><path d="M60 11H80" stroke="#14213d" stroke-width="3"/></g><g class="acc c2"><path d="M45 -8L74 3L45 13L16 3Z" fill="#222" stroke="#14213d" stroke-width="1.5"/><path d="M68 5V18" stroke="#ffd60a" stroke-width="2"/></g><path class="acc c3" d="M45 62L50 70L46 90H44L40 70Z" fill="#c1121f"/><path class="acc c4" d="M24 9L28 -6L37 3L45 -9L53 3L62 -6L66 9Z" fill="#ffd60a" stroke="#14213d" stroke-width="1.5"/></g></svg></button></div></div>
+  <p class="hint">도로 위 성현을 눌러서 돈을 모으세요</p>
+  <h2>능력 올리기</h2>
+  <div id="power"></div>
+  <h2>가게 열기</h2>
+  <div id="jobs"></div>
+  <div class="foot"><button id="reset">처음부터 다시 하기</button></div>
+</main>
+<script>
+(function(){
+  var KEY="seonghyeon-v1";
+  var STAGES=[[0,"🥺","거지 성현"],[500,"🧢","알바생 성현"],[10000,"🎓","대학생 성현"],[300000,"💼","사장 성현"],[10000000,"👑","재벌 성현"]];
+  var SHIRTS=["#8a6d4b","#2a9d8f","#3a86ff","#1d2d50","#7b2cbf"];
+  var JOBS=[
+    {n:"편의점",i:"🏪",d:"초당 1원",base:50,r:1},
+    {n:"학원",i:"🏫",d:"초당 6원",base:400,r:6},
+    {n:"마트",i:"🏬",d:"초당 40원",base:3000,r:40},
+    {n:"치킨 프랜차이즈",i:"🍗",d:"초당 250원",base:20000,r:250},
+    {n:"빌딩 임대업",i:"🏢",d:"초당 1,500원",base:150000,r:1500}
+  ];
+  var S={money:0,total:0,power:1,jobs:JOBS.map(function(){return 0}),t:Date.now()};
+  try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);if(o&&typeof o.money==="number"){S=o;
+    if(!S.jobs||S.jobs.length!==JOBS.length)S.jobs=JOBS.map(function(){return 0});
+    var off=Math.min((Date.now()-(S.t||Date.now()))/1000,3600);var g=off*rate();S.money+=g;S.total+=g;}}}catch(e){}
+  function rate(){var s=0;for(var i=0;i<JOBS.length;i++)s+=JOBS[i].r*S.jobs[i];return s}
+  function powerCost(){return Math.floor(15*Math.pow(1.5,S.power-1))}
+  function jobCost(i){return Math.floor(JOBS[i].base*Math.pow(1.15,S.jobs[i]))}
+  function fmt(n){n=Math.floor(n);var u=[[1e12,"조"],[1e8,"억"],[1e4,"만"]];
+    for(var i=0;i<u.length;i++){if(n>=u[i][0]){var v=n/u[i][0];return (v>=100?Math.floor(v):v.toFixed(1).replace(/\.0$/,""))+u[i][1]+"원"}}
+    return n.toLocaleString("ko-KR")+"원"}
+  var $=function(id){return document.getElementById(id)};
+  function row(ico,nm,ds,id){
+    var d=document.createElement("div");d.className="item";
+    d.innerHTML='<div class="ico">'+ico+'</div><div class="info"><p class="nm"></p><p class="ds"></p></div><button class="buy" id="'+id+'"></button>';
+    d.querySelector(".nm").textContent=nm;d.querySelector(".ds").textContent=ds;return d}
+  var pw=row("💪","성현 파워","","bp");$("power").appendChild(pw);
+  JOBS.forEach(function(j,i){$("jobs").appendChild(row(j.i,j.n,j.d,"bj"+i))});
+  $("bp").onclick=function(){var c=powerCost();if(S.money>=c){S.money-=c;S.power++;draw()}};
+  JOBS.forEach(function(j,i){$("bj"+i).onclick=function(){var c=jobCost(i);if(S.money>=c){S.money-=c;S.jobs[i]++;draw()}}});
+  $("tap").addEventListener("click",function(e){
+    S.money+=S.power;S.total+=S.power;
+    var p=document.createElement("span");p.className="pop";p.textContent="+"+S.power;
+    p.style.left=(40+Math.random()*60)+"%";p.style.top="20%";$("tap").parentNode.appendChild(p);
+    setTimeout(function(){p.remove()},800);draw()});
+  $("reset").onclick=function(){if(confirm("모든 진행 상황이 사라져요. 처음부터 다시 할까요?")){
+    S={money:0,total:0,power:1,jobs:JOBS.map(function(){return 0}),t:Date.now()};save();draw()}};
+  function save(){S.t=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+  var grps=[];
+  function drawTown(){var t=$("town");
+    JOBS.forEach(function(j,i){
+      if(!grps[i]){var g0=document.createElement("span");g0.className="grp";g0.setAttribute("aria-label",j.n);t.appendChild(g0);grps[i]=g0}
+      var g=grps[i],n=Math.min(S.jobs[i],3),sm=g.querySelector("small"),bl=g.querySelectorAll(".bld"),c=bl.length;
+      while(c<n){var b=document.createElement("span");b.className="bld";b.textContent=j.i;g.insertBefore(b,sm);c++}
+      while(c>n){g.removeChild(bl[c-1]);c--}
+      if(S.jobs[i]>3){if(!sm){sm=document.createElement("small");g.appendChild(sm)}sm.textContent="×"+S.jobs[i]}else if(sm){g.removeChild(sm)}
+    })}
+  function draw(){
+    $("money").textContent=fmt(S.money);
+    $("rate").textContent="초당 "+fmt(rate())+" · 한 번 누를 때 "+fmt(S.power);
+    var st=STAGES[0];for(var i=0;i<STAGES.length;i++)if(S.total>=STAGES[i][0])st=STAGES[i];
+    var si=STAGES.indexOf(st),cv=$("tap").firstChild;if(cv.getAttribute("data-s")!=si){cv.setAttribute("data-s",si);cv.style.setProperty("--shirt",SHIRTS[si])}$("stage").textContent=st[2];drawTown();
+    var b=$("bp");b.textContent=fmt(powerCost());b.disabled=S.money<powerCost();b.className="buy"+(b.disabled?"":" can");
+    pw.querySelector(".ds").textContent="Lv."+S.power+" · 누를 때마다 +"+S.power+"원";
+    JOBS.forEach(function(j,i){var bb=$("bj"+i),c=jobCost(i);bb.textContent=fmt(c);bb.disabled=S.money<c;bb.className="buy"+(bb.disabled?"":" can");
+      bb.parentNode.querySelector(".ds").textContent=j.d+" · 보유 "+S.jobs[i]+"개"})}
+  var last=Date.now();
+  setInterval(function(){var n=Date.now(),dt=(n-last)/1000;last=n;var g=rate()*dt;S.money+=g;S.total+=g;draw()},250);
+  setInterval(save,5000);
+  window.addEventListener("beforeunload",save);
+  draw();
+})();
+</script>
+</body>
+</html>
